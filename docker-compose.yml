@@ -13,7 +13,7 @@ services:
     volumes:
       - ./docker-allure-test-results/:/cteleport-assignment/allure-results
     build:
-      context: bash_files
-      dockerfile: .
+      context: .
+      dockerfile: Test_Dockerfile
 
     network_mode: host
