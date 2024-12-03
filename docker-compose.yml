@@ -4,7 +4,7 @@
 # To execute a specific service, use docker-compose -f docker-compose.yml up <service_name>
 
 services:
-  cteleport-assignment-tests:
+  cteleport-automated-tests:
     container_name: cteleport-assignment-container
     environment:
       PYTEST_ARGS:
