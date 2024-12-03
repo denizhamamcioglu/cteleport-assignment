@@ -60,7 +60,6 @@ jobs:
     if: github.event.schedule == '0 11 * * *' || github.event_name == 'pull_request'
     with:
       PYTEST_ARGS: ''
-      SLACK_CHANNEL_ID: '' # for slack messages
       JOB_NAME: "basic search tests"
     secrets: inherit
 
@@ -110,7 +109,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     with:
       PYTEST_ARGS: "${{ needs.build_args.outputs.pytestArgs }}"
-      SLACK_CHANNEL_ID: ''
       JOB_NAME: "${{ needs.build_args.outputs.pytestArgs }}"
     secrets: inherit            
   
