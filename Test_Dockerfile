@@ -5,7 +5,7 @@ WORKDIR /cteleport-assignment
 
 ARG PYTEST_ARGS
 
-COPY bash_files .
+COPY bash_scripts .
 
 RUN chmod +x ./bash_scripts/docker-test-entrypoint.sh
 CMD ["./bash_scripts/docker-test-entrypoint.sh"]
