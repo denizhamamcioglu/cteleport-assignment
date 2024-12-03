@@ -1,0 +1,116 @@
+name: C Teleport Automated Tests CI Execution
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      base_url_input:
+        type: string
+        description: "option for the --base-url parameter with a free text"
+        required: false
+        default: https://www.kiwi.com/en/
+
+      browser_input:
+        type: choice
+        description: "options for --browser parameter"
+        options:
+          - chrome
+          - firefox
+          - edge
+        default: "chrome"
+
+      test_selection_input:
+        type: choice
+        description: 'Select a test suite to execute'
+        options:
+          - All
+          - Smoke
+          - Basic_Search
+          - Other
+        required: false
+        default: "Basic Search"
+
+      custom_test_selection_input:
+        type: string
+        description: "option for “other” with a free text"
+        required: false
+
+      parallel_run:
+        description: 'use parallel executions ?'
+        type: boolean
+        required: false
+        default: true
+
+      retry_failures:
+        description: 'retry the failed tests ?'
+        type: boolean
+        required: false
+        default: true
+
+  schedule:
+    - name: basic-search-tests
+      cron: '0 11 * * *'
+
+jobs:
+  basic-search-tests:
+    uses: ./.github/workflows/integration_tests.yml
+    if: github.event.schedule == '0 11 * * *' || github.event_name == 'pull_request'
+    with:
+      PYTEST_ARGS: ''
+      SLACK_CHANNEL_ID: '' # for slack messages
+      JOB_NAME: "basic search tests"
+    secrets: inherit
+
+  build_args:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    outputs:
+      pytestArgs: ${{ steps.set_vars.outputs.pytestArgs }}
+    steps:
+      - name: Build Command Line Parameters
+        id: set_vars
+        run: |
+          base_url="${{ github.event.inputs.base_url_input }}"
+
+          run_tests=""
+          case "${{ github.event.inputs.test_selection_input }}" in
+            Smoke) run_tests="-m smoke" ;;
+            Basic_Search) run_tests="-m basic_search" ;;
+            Other) run_tests="${{ github.event.inputs.custom_test_selection_input }}" ;;
+          esac
+          
+          parallel_run="${{ github.event.inputs.parallel_run }}"
+          retry_failures="${{ github.event.inputs.retry_failures }}"
+          
+          parallel_param=""
+          retry_failures_param=""
+          
+          if [[ "$parallel_run" == "false" ]]; then
+              parallel_param="-n 0"
+          fi
+          
+          if [[ "$retry_failures" == "false" ]]; then
+              retry_failures_param="--reruns 0"
+          fi
+          
+          browser="${{ github.event.inputs.browser_input }}"
+          
+          cmd_param="$run_tests --base-url=$base_url --browser=$browser $parallel_param $retry_failures_param"
+          
+          echo "Setting PytestArgs..."
+          echo "pytestArgs=$cmd_param" >> $GITHUB_OUTPUT
+          echo "Command line parameters: $cmd_param"
+
+  integration-tests-manual:
+    needs: build_args
+    uses: ./.github/workflows/integration_tests.yml
+    if: github.event_name == 'workflow_dispatch'
+    with:
+      PYTEST_ARGS: "${{ needs.build_args.outputs.pytestArgs }}"
+      SLACK_CHANNEL_ID: ''
+      JOB_NAME: "${{ needs.build_args.outputs.pytestArgs }}"
+    secrets: inherit            
+  

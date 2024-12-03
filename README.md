@@ -1,2 +1,3 @@
-# cteleport-assignment
-Take Home Assignment Submission For CTeleport
+# Deniz Hamamcioglu - CTeleport Take Home Assignment
+
+## Installation

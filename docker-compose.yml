@@ -1,0 +1,20 @@
+# To execute this docker-compose yml file and all of its services, use `docker-compose -f docker-compose.yml up`
+# Add the `-d` flag at the end for detached execution
+# To stop the execution of all services, hit Ctrl+C, and then `docker-compose -f docker-compose.yml down`
+# To execute a specific service, use docker-compose -f docker-compose.yml up <service_name>
+
+version: "3"
+services:
+  cteleport-assignment-tests:
+    container_name: cteleport-assignment-container
+    environment:
+      PYTEST_ARGS:
+
+    shm_size: 4gb
+    volumes:
+      - ./docker-allure-test-results/:/cteleport-assignment/allure-results
+    build:
+      context: bash_files
+      dockerfile: Dockerfile
+
+    network_mode: host
