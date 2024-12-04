@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main, master ]
 jobs:
-  test:
+  cteleport-tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -20,8 +20,8 @@ jobs:
         pip install -r requirements.txt
     - name: Ensure browsers are installed
       run: python -m playwright install --with-deps
-    - name: Run your tests
-      run: pytest -m basic_search --tracing=retain-on-failure
+    - name: Run the tests
+      run: pytest -m basic_search
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
