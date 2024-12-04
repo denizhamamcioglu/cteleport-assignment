@@ -11,7 +11,7 @@ services:
 
     shm_size: 4gb
     volumes:
-      - ./docker-allure-test-results/:/cteleport-assignment/allure-results
+      - ./docker-allure-test-results/:/allure-results
     build:
       context: .
       dockerfile: Test_Dockerfile

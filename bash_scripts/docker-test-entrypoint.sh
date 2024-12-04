@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "Bash: Installing requirements"
+tail -f /dev/null
 pip install -r requirements.txt
 echo "Bash: Executing tests."
 # shellcheck disable=SC2086
