@@ -1,6 +1,0 @@
-FROM mcr.microsoft.com/playwright/python:v1.49.0-noble
-MAINTAINER Deniz Hamamcioglu - denizhamamcioglu@gmail.com
-
-ARG PYTEST_ARGS
-COPY . .
-CMD ["./bash_scripts/docker-test-entrypoint.sh"]

@@ -2,10 +2,10 @@ import os
 
 from common.common_utils.common_utils import CommonUtils
 
-ELEMENT_WAIT_TIMEOUT = 15
+ELEMENT_WAIT_TIMEOUT = 10
 ROOT_DIR = os.path.abspath(os.curdir)
 UI_POLL_INTERVAL = 0.5
-TIMEOUT = 30
+TIMEOUT = 10
 SHORT_WAIT = 2000
 TYPE_DELAY = 0.1
 WAIT_TIME = 0.3
