@@ -8,6 +8,7 @@ from playwright.sync_api import Page
 from pytest_bdd import given, parsers
 
 from common import common_config
+from common.common_utils.automation_utils import AutomationUtils
 from pages.homepage.homepage_selectors import HomepageSelectors
 
 load_dotenv()
@@ -34,7 +35,10 @@ def set_playwright(playwright):
 @given(parsers.cfparse("As a {is_logged_in} user navigate to homepage"))
 def navigate_to_homepage(page: Page, is_logged_in: str):
     page.goto("/")
-    HomepageSelectors(page).accept_cookies_button.click()
+    AutomationUtils(page).optionally_wait_for_element(HomepageSelectors(page).accept_cookies_button)
+
+    if HomepageSelectors(page).accept_cookies_button:
+        HomepageSelectors(page).accept_cookies_button.click()
 
     if "not" not in is_logged_in.lower():
         pass  # do the login operations if necessary.
