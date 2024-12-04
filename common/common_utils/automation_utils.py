@@ -11,7 +11,5 @@ class AutomationUtils:
 
     @staticmethod
     def optionally_wait_for_element(element: Locator, timeout: int = common_config.SHORT_WAIT):
-        try:
-            element.wait_for(timeout=timeout, state="visible")
-        except TimeoutError:
-            pass
+        return element.is_visible(timeout=timeout)
+
