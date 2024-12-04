@@ -20,7 +20,10 @@ load_dotenv()
 def page(request, browser) -> Page:
     os.makedirs(common_config.VIDEOS_FOLDER, exist_ok=True)
     base_url = os.getenv("TEST_URL", "https://www.kiwi.com/en/") or "https://www.kiwi.com/en/"
-    context = browser.new_context(base_url=base_url, viewport={"width": 1920, "height": 1080}, record_video_dir="./resources/videos")
+    context = browser.new_context(base_url=base_url, viewport={"width": 1920, "height": 1080}, record_video_dir="./resources/videos", user_agent=(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/111.0.0.0 Safari/537.36"
+    ))
     page = context.new_page()
     yield page
     page.close()
